@@ -123,9 +123,32 @@ public class NoteActivity extends AppCompatActivity {
         } else if (id == R.id.action_cancel) {
             mIsCancelling = true;
             finish();
+        } else if (id == R.id.action_next) {
+            moveNext();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    // only get called initially when menu is displayed
+    // call invalidateOptionsMenu() to refresh
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem menuItem = menu.findItem(R.id.action_next);
+        int lastNoteIdx = DataManager.getInstance().getNotes().size() - 1;
+        menuItem.setEnabled(mNotePosition < lastNoteIdx);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    // move to next note
+    private void moveNext() {
+        saveNote();
+        mNotePosition++;
+        mNote = DataManager.getInstance().getNotes().get(mNotePosition);
+
+        saveInitialNoteValues();
+        displayNote(mSpinnerCourses, mTextNoteTitle, mTextNoteText);
+        invalidateOptionsMenu();
     }
 
     @Override
