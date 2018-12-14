@@ -56,6 +56,6 @@ public class NextThroughNotesTest {
                 onView(allOf(withId(R.id.action_next), isEnabled())).perform(click());
         }
         onView(withId(R.id.action_next)).check(matches(not(isEnabled())));
-
+        pressBack();
     }
 }
