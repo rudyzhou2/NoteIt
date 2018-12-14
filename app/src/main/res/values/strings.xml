@@ -11,4 +11,8 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
+    <string name="note_title_hint">Note title</string>
+    <string name="note_text_hint">Note text</string>
+    <string name="nav_share_msg">Share</string>
+    <string name="nav_send_msg">Send</string>
 </resources>
