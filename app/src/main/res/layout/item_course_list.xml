@@ -26,7 +26,7 @@
                 android:layout_marginStart="8dp"
                 android:text="TextView"
                 android:textAlignment="center"
-                android:textAppearance="@android:style/TextAppearance.Material.Medium"
+                android:textAppearance="@style/CourseTitle"
                 app:layout_constraintBottom_toTopOf="@+id/imageView2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
