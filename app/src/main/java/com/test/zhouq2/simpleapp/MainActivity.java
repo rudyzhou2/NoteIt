@@ -1,7 +1,9 @@
 package com.test.zhouq2.simpleapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -41,6 +44,11 @@ public class MainActivity extends AppCompatActivity
                 startActivity(new Intent(MainActivity.this, NoteActivity.class));
             }
         });
+
+        // disable preference default loading
+        PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
+        PreferenceManager.setDefaultValues(this, R.xml.pref_notification, false);
+        PreferenceManager.setDefaultValues(this, R.xml.pref_data_sync, false);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -80,6 +88,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
 
@@ -99,7 +108,8 @@ public class MainActivity extends AppCompatActivity
             displayCourses();
             // handleSelection("Courses");
         } else if (id == R.id.nav_share) {
-            handleSelection(R.string.nav_share_msg);
+//            handleSelection(R.string.nav_share_msg);
+            handleShare();
         } else if (id == R.id.nav_send) {
             handleSelection(R.string.nav_send_msg);
         }
@@ -107,6 +117,13 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void handleShare() {
+        View view = findViewById(R.id.list_items);
+        Snackbar.make(view, "Share to - " +
+                        PreferenceManager.getDefaultSharedPreferences(this).getString("user_favSocial", ""),
+                Snackbar.LENGTH_LONG).show();
     }
 
     private void handleSelection(int message_id) {
@@ -118,7 +135,23 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         mNoteRecyclerAdapter.notifyDataSetChanged();
+        reloadPref();
         // mAdapterNotes.notifyDataSetChanged();
+    }
+
+    private void reloadPref() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView txtUserName = (TextView) headerView.findViewById(R.id.text_userName);
+        TextView txtUserEmail = (TextView) headerView.findViewById(R.id.text_emailAddress);
+
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        String userName = pref.getString("user_displayName", "");
+        String emailAddress = pref.getString("user_email", "");
+
+        txtUserName.setText(userName);
+        txtUserEmail.setText(emailAddress);
+
     }
 
     private void initializeDisplayContent() {
